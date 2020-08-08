@@ -5,3 +5,9 @@ obj/
 appsettings.json
 appsetting.Development.json
 bin/
+/.idea/.idea.DatingApp.API/.idea/dataSources.xml
+/.idea/.idea.DatingApp.API/.idea/encodings.xml
+/.idea/.idea.DatingApp.API/.idea/indexLayout.xml
+/.idea/.idea.DatingApp.API/.idea/misc.xml
+/.idea/.idea.DatingApp.API/riderModule.iml
+/.idea/.idea.DatingApp.API/.idea/vcs.xml
