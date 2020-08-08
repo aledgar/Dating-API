@@ -9,6 +9,7 @@ namespace DatingApp.API.Data
     public class DatingRepository : IDatingRepository
     {
         private readonly DataContext _context;
+        private IDatingRepository _datingRepositoryImplementation;
 
         public DatingRepository(DataContext context)
         {
@@ -40,6 +41,16 @@ namespace DatingApp.API.Data
             return await _context.Users
                 .Include(user => user.Photos)
                 .ToListAsync();
+        }
+
+        public async Task<Photo> GetPhoto(int id)
+        {
+            return await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Photo> GetMainPhoto(int id)
+        {
+            return await _context.Photos.Where(p => p.UserId == id).FirstOrDefaultAsync(p => p.IsMain);
         }
     }
 }
