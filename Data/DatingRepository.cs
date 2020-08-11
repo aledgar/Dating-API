@@ -30,10 +30,15 @@ namespace DatingApp.API.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<User> GetUser(int id)
+        {
+            return await _context.Users.Include(user => user.Photos).FirstOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task<List<User>> GetUsers()
         {
             return await _context.Users
-                .Include(photo => photo.Photos)
+                .Include(user => user.Photos)
                 .ToListAsync();
         }
     }
