@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Dtos;
+using DatingApp.API.helpers;
+using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DatingApp.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
@@ -25,14 +28,16 @@ namespace DatingApp.API.Controllers
         }
 
         // GET
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] UserParams userParams)
         {
-            var users = await _datingRepository.GetUsers();
+            var users = await _datingRepository.GetUsers(userParams);
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
+            Response.AddPagination(users.CurrentPage, users.PageSize,
+                users.TotalCount, users.TotalPages);
             return Ok(usersToReturn);
         }
 
-        [HttpGet("find/{id}")]
+        [HttpGet("find/{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _datingRepository.GetUser(id);
@@ -60,5 +65,36 @@ namespace DatingApp.API.Controllers
             throw new Exception($"Updating user {id} failed on save");
         }
 
+        [HttpPost("add-like")]
+        public async Task<IActionResult> AddLike(LikeForCreationDto like)
+        {
+            if (like.LikerId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
+            var likeGiven = await _datingRepository.GetLike(like.LikerId, like.LikeeId);
+
+            if (likeGiven!=null)
+            {
+                _datingRepository.Delete(likeGiven);
+                return Ok();
+            }
+
+            Like likeToCreate = new Like
+            {
+                LikeeId = like.LikeeId,
+                LikerId = like.LikerId
+            };
+
+            _datingRepository.Add(likeToCreate);
+
+            if (await _datingRepository.SaveAll())
+            {
+                return Ok();
+            }
+
+            return BadRequest("Failed to like the user");
+        }
     }
 }
