@@ -87,7 +87,7 @@ namespace DatingApp.API.Controllers
                 LikerId = like.LikerId
             };
 
-            _datingRepository.Add(likeToCreate);
+            await _datingRepository.Add(likeToCreate);
 
             if (await _datingRepository.SaveAll())
             {

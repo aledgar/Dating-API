@@ -28,12 +28,15 @@ namespace DatingApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseSqlite
-                (Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x =>
+                x.UseLazyLoadingProxies().UseMySql
+                    (Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+
             services.AddCors();
             services.AddTransient<Seed>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
@@ -47,7 +50,7 @@ namespace DatingApp.API
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                        .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
@@ -68,7 +71,7 @@ namespace DatingApp.API
                 {
                     builder.Run(async context =>
                     {
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
                         var error = context.Features.Get<IExceptionHandlerFeature>();
                         if (error != null)
@@ -90,10 +93,7 @@ namespace DatingApp.API
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

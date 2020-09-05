@@ -1,5 +1,10 @@
+using System;
+using DatingApp.API.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace DatingApp.API
 {
@@ -8,7 +13,9 @@ namespace DatingApp.API
         public static void Main(string[] args)
         {
             //var host = CreateHostBuilder(args).Build();
+
             CreateHostBuilder(args).Build().Run();
+
             // using (var scope = host.Services.CreateScope())
             // {
             //     var services = scope.ServiceProvider;
@@ -24,7 +31,6 @@ namespace DatingApp.API
             //         logger.LogError(ex, "An error occured during migration");
             //     }
             // }
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
