@@ -1,6 +1,6 @@
 ﻿[
   {
-    "email": "Brown@gmail.com",
+    "Email": "Brown@gmail.com",
     "Gender": "male",
     "DateOfBirth": "1976-08-09",
     "Password": "password",
@@ -21,7 +21,7 @@
     ]
   },
   {
-    "email": "Hyde@gmail.com",
+    "Email": "Hyde@gmail.com",
     "Gender": "male",
     "DateOfBirth": "1960-08-25",
     "Password": "password",
@@ -42,7 +42,7 @@
     ]
   },
   {
-    "email": "Carroll@gmail.com",
+    "Email": "Carroll@gmail.com",
     "Gender": "male",
     "DateOfBirth": "1961-02-04",
     "Password": "password",
@@ -63,7 +63,7 @@
     ]
   },
   {
-    "email": "Burns@gmail.com",
+    "Email": "Burns@gmail.com",
     "Gender": "male",
     "DateOfBirth": "1977-01-29",
     "Password": "password",
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "email": "Sandoval@gmail.com",
+    "Email": "Sandoval@gmail.com",
     "Gender": "male",
     "DateOfBirth": "1978-09-22",
     "Password": "password",
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "email": "Verna@gmail.com",
+    "Email": "Verna@gmail.com",
     "Gender": "female",
     "DateOfBirth": "1951-12-29",
     "Password": "password",
@@ -126,7 +126,7 @@
     ]
   },
   {
-    "email": "Carmen@gmail.com",
+    "Email": "Carmen@gmail.com",
     "Gender": "female",
     "DateOfBirth": "1993-04-27",
     "Password": "password",
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "email": "Nettie@gmail.com",
+    "Email": "Nettie@gmail.com",
     "Gender": "female",
     "DateOfBirth": "1950-09-30",
     "Password": "password",
@@ -168,7 +168,7 @@
     ]
   },
   {
-    "email": "Nelda@gmail.com",
+    "Email": "Nelda@gmail.com",
     "Gender": "female",
     "DateOfBirth": "1970-05-05",
     "Password": "password",
@@ -189,7 +189,7 @@
     ]
   },
   {
-    "email": "Maryann@gmail.com",
+    "Email": "Maryann@gmail.com",
     "Gender": "female",
     "DateOfBirth": "1978-03-18",
     "Password": "password",

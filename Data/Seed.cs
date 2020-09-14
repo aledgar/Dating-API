@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Linq;
 using DatingApp.API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace DatingApp.API.Data
@@ -14,36 +15,60 @@ namespace DatingApp.API.Data
         // {
         //     _logger = logger;
         // }
-        public static void SeedUsers(DataContext context)
+        public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            if (!context.Users.Any())
+            if (!userManager.Users.Any())
             {
                 var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
 
+                var roles = new List<Role>
+                {
+                    new Role {Name = "Member"},
+                    new Role {Name = "Admin"},
+                    new Role {Name = "Moderator"},
+                    new Role {Name = "VIP"}
+                };
+
+                roles.ForEach(r => roleManager.CreateAsync(r).Wait());
+
+                // foreach (var role in roles)
+                // {
+                //     roleManager.CreateAsync(role);
+                // }
+                var cont = 0;
                 foreach (var user in users)
                 {
-                    byte[] passwordHash, passwordSalt;
-                    createPasswordHash("password", out passwordHash, out passwordSalt);
-
-                    user.PasswordHash = passwordHash;
-                    user.PasswordSalt = passwordSalt;
-                    user.Email = user.Email.ToLower();
-                    context.Users.Add(user);
-                    //_logger.LogInformation(user.Introduction);
+                    //.Photos.SingleOrDefault().IsMain = true;
+                    user.UserName = "null"+cont;
+                    userManager.CreateAsync(user, "password").Wait();
+                    userManager.AddToRoleAsync(user, "Member").Wait();
+                    cont++;
                 }
 
-                context.SaveChanges();
+                var adminUser = new User
+                {
+                    Email = "admin@datingapp.com",
+                    UserName = "null"+cont
+                };
+
+                var result = userManager.CreateAsync(adminUser, "password").Result;
+
+                if (result.Succeeded)
+                {
+                    var admin = userManager.FindByEmailAsync("admin@datingapp.com").Result;
+                    userManager.AddToRolesAsync(admin, new [] {"Admin", "Moderator"}).Wait();
+                }
             }
         }
 
-        public static void createPasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash((System.Text.Encoding.UTF8.GetBytes(password)));
-            }
-        }
+        // public static void createPasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        // {
+        //     using (var hmac = new System.Security.Cryptography.HMACSHA512())
+        //     {
+        //         passwordSalt = hmac.Key;
+        //         passwordHash = hmac.ComputeHash((System.Text.Encoding.UTF8.GetBytes(password)));
+        //     }
+        // }
     }
 }
